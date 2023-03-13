@@ -29,8 +29,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/products',
-                element: <PrivateRoute><Products></Products></PrivateRoute>,
-                loader: () => fetch('http://localhost:5000/products')
+                element: <PrivateRoute><Products></Products></PrivateRoute>
             },
             {
                 path: '/addProducts',
@@ -39,14 +38,13 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/manageProducts',
-                element:<ManageProducts></ManageProducts>,
-                loader: () => fetch('http://localhost:5000/products')
+                element:<ManageProducts></ManageProducts>
 
             },
             {
                 path: '/editInfo/:id',
                 element: <UpdateInfo></UpdateInfo>,
-                loader: ({params}) => fetch(`http://localhost:5000/products/${params.id}`)
+                loader: ({params}) => fetch(`https://odvut-solution-server.vercel.app/products/${params.id}`)
             },
             
         ]

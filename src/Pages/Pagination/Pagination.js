@@ -8,7 +8,7 @@ const Pagination = ({ totalCard, cardNumber, setPages }) => {
         <div className='flex justify-center align-middle items-center mt-12'>
             {
                 pages.map((page, index) => {
-                    return <button onClick={() => setPages(page)} key={index} className="btn mx-4">{page}</button>
+                    return <button onClick={() => setPages(page)} key={index} className="btn mx-2">{page}</button>
                 })
             }
         </div>

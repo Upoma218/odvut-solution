@@ -12,7 +12,7 @@ const Products = () => {
     const currentPost = products.slice(firstPostIndex, lastPostIndex)
 
     useEffect(() => {
-        fetch('http://localhost:5000/products')
+        fetch('https://odvut-solution-server.vercel.app/products')
             .then(res => res.json())
             .then(data => setProducts(data))
     }, [])
@@ -47,7 +47,7 @@ const Products = () => {
                                 <img src={product.image} alt="Shoes" className='w-32 h-48' />
                             </figure>
                             <div className="card-body items-center text-center">
-                                <h2 className="card-title text-secondary">{product.title}</h2>
+                                <h2 className="card-title">{product.title}</h2>
                             </div>
                         </div>)
                 }

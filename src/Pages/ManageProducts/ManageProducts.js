@@ -1,18 +1,23 @@
-import React, {  useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { Link, useLoaderData } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const ManageProducts = () => {
-    const products = useLoaderData()
+    const [products, setProducts] = useState([])
     const [deleteProducts, setDeleteProducts] = useState([]);
-   
+    useEffect(()=>{
+        fetch('https://odvut-solution-server.vercel.app/products')
+        .then(res => res.json())
+        .then(data=> setProducts(data))
+    },[])
     const handleDelete = id => {
         const proceed = window.confirm('Are you sure to delete this product?');
         if (proceed) {
-            fetch(`http://localhost:5000/product/${id}`, {
+            fetch(`https://odvut-solution-server.vercel.app/product/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'content-type': 'application/json',
+                    authorization: `Bearer ${localStorage.getItem('accessToken')}`
                 }
             })
                 .then(res => res.json())
@@ -28,7 +33,7 @@ const ManageProducts = () => {
     }
     return (
         <div>
-            <h1 className='text-4xl font-bold text-center text-white my-6'>Manage All Products</h1>
+            <h1 className='text-4xl font-bold text-center my-6'>Manage All Products</h1>
             <div className="overflow-x-auto border-1 lg:px-12" >
                 <table className="table table-compact w-full ">
                     <thead>

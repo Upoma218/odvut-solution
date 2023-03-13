@@ -29,7 +29,7 @@ const AddProducts = () => {
                     }
 
 
-                    fetch('http://localhost:5000/products', {
+                    fetch('https://odvut-solution-server.vercel.app/products', {
                         method: 'POST',
                         headers: {
                             'content-type': 'application/json',
@@ -54,7 +54,7 @@ const AddProducts = () => {
 
     return (
         <div>
-            <h1 className='text-4xl font-bold text-center text-white my-6'>Add Products</h1>
+            <h1 className='text-4xl font-bold text-center my-6'>Add Products</h1>
             <div className='lg:w-3/4 lg:mx-44'>
                 <div className='p-7 rounded-2xl bg-white lg:mx-auto'>
                     <form onSubmit={handleSubmit(handleAddProduct)}>
