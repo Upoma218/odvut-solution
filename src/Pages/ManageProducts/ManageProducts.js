@@ -1,15 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { Link } from 'react-router-dom';
+import { Link, useLoaderData } from 'react-router-dom';
 
 const ManageProducts = () => {
-    const [products, setProducts] = useState([]);
+    const products = useLoaderData()
     const [deleteProducts, setDeleteProducts] = useState([]);
-    useEffect(() => {
-        fetch('http://localhost:5000/products')
-            .then(res => res.json())
-            .then(data => setProducts(data))
-    }, [])
+   
     const handleDelete = id => {
         const proceed = window.confirm('Are you sure to delete this product?');
         if (proceed) {

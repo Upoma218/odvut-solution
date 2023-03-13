@@ -29,7 +29,8 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/products',
-                element: <PrivateRoute><Products></Products></PrivateRoute>
+                element: <PrivateRoute><Products></Products></PrivateRoute>,
+                loader: () => fetch('http://localhost:5000/products')
             },
             {
                 path: '/addProducts',
@@ -38,7 +39,8 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/manageProducts',
-                element:<ManageProducts></ManageProducts>
+                element:<ManageProducts></ManageProducts>,
+                loader: () => fetch('http://localhost:5000/products')
 
             },
             {
