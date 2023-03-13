@@ -1,13 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { BsPersonCircle } from "react-icons/bs";
-import { Link } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import { AuthContext } from '../../../Context/AuthProvider';
 import useAdmin from '../../../Hooks/useAdmin';
 
 const NavBar = () => {
     const { user, logOut } = useContext(AuthContext);
     const [isAdmin] = useAdmin(user?.email);
+  
     const handleLogOut = () => {
         logOut()
             .then(() => {
@@ -24,22 +25,20 @@ const NavBar = () => {
                 <Link to='/' className="normal-case no-underline text-2xl font-bold">Odvut Solution</Link>
             </div>
             <div className="flex-none">
-                    <ul className="menu menu-horizontal px-1">
+                <ul className="menu menu-horizontal px-1">
                     <li><Link to='/'>Home</Link></li>
                     {
-                            isAdmin && 
-                            <>
-                                <li><Link to='/addProducts'>Add products</Link></li>
-                                <li><Link to='/manageProducts'>Manage Products</Link></li>
-                            </>
-                        }
-                    </ul>
-                </div>
+                        isAdmin &&
+                        <>
+                            <li><Link to='/addProducts'>Add products</Link></li>
+                            <li><Link to='/manageProducts'>Manage Products</Link></li>
+                        </>
+                    }
+                </ul>
+            </div>
             <div className="flex-none gap-2">
-                <div className="form-control">
-                    <input type="text" placeholder="Search" className="input input-bordered" />
-                </div>
                 
+
                 <div className="dropdown dropdown-end">
                     <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                         <div className="rounded-full">
