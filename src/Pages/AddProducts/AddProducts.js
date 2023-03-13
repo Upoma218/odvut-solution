@@ -1,108 +1,85 @@
-// import React from 'react';
-// import { toast } from 'react-hot-toast';
-// import { useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
+import { useNavigate, useNavigation } from 'react-router-dom';
+import { AuthContext } from '../../Context/AuthProvider';
 
-// const AddProducts = () => { const navigate = useNavigate();
-//     const handleAddPatient = event => {
-//         event.preventDefault();
-//         const form = event.target;
-//         const name = form.name.value;
-//         const email = form.email.value;
-//         const phone = form.phone.value;
-//         const address = form.address.value;
-//         const disease = form.disease.value;
-//         const condition = form.condition.value;
+const AddProducts = () => {
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { user } = useContext(AuthContext)
+    const imageHostKey = process.env.REACT_APP_imageBB_key;
 
-//         const detail = {
-//             name: name,
-//             email: email,
-//             phone: phone,
-//             address: address,
-//             disease: disease,
-//             condition: condition,
-//         }
+    const navigate = useNavigate();
+    const navigation = useNavigation();
+
+    const handleAddProduct = data => {
+        const image = data.image[0];
+        const formData = new FormData();
+        formData.append('image', image);
+        const url = `https://api.imgbb.com/1/upload?key=${imageHostKey}`
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+            .then(res => res.json())
+            .then(imgData => {
+                if (imgData.success) {
+                    console.log(imgData.data.url);
+                    const product = {
+                        title: data.title,
+                        image: imgData.data.url
+                    }
 
 
-//         fetch('https://patient-care-app-server.vercel.app/details', {
-//             method: 'POST',
-//             headers: {
-//                 'content-type': 'application/json',
-//             },
-//             body: JSON.stringify(detail)
-//         })
-//             .then(res => res.json())
-//             .then(data => {
-//                 if (data.acknowledged) {
-//                     toast('Patient details added successfully!');
-//                     form.reset();
-//                     navigate('/displayPatient')
-//                 }
-//                 console.log(data);
-//             })
-//             .catch(error => console.log(error))
-//     }
-//     return (
-//         <div className="hero min-h-screen">
-//             <div className="hero-content flex-col lg:flex-row">
-//                 <img src='{logo}' className="rounded-lg shadow- 2xl lg:w-1/2" alt='' />
-//                 <div className='lg:ml-6 my-12 lg:w-1/2' >
-//                     <h1 className='text-4xl font-bold text-center text-info my-6'>Enter Patient Details</h1>
-//                     <div className='rounded-2xl shadow-xl bg-sky-50'>
+                    fetch('http://localhost:5000/products', {
+                        method: 'POST',
+                        headers: {
+                            'content-type': 'application/json',
+                            authorization: `bearer ${localStorage.getItem('accessToken')}`
+                        },
+                        body: JSON.stringify(product)
+                    })
+                        .then(res => res.json())
+                        .then(result => {
+                            console.log(result);
+                            toast.success(`Product added successfully`);
+                            navigate('/products')
+                        })
+                }
+            })
+    }
 
-//                         <form onSubmit={handleAddPatient} className="bg-light p-4 rounded-3 px-3 lg:px-12">
-//                             <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
-//                                 <div>
-//                                     <label>
-//                                         <h1 className=''>Patient Name</h1>
-//                                     </label>
-//                                     <input type="text" name='name' placeholder='Patient Name' required className='w-full my-3 p-2' />
-//                                 </div>
-//                                 <div>
-//                                     <label>
-//                                         <h1 className=''>Email</h1>
-//                                     </label>
-//                                     <input type="email" name='email' placeholder='Email' required className='w-full 
-//                        my-3 p-2' />
-//                                 </div>
-//                                 <div>
-//                                     <label>
-//                                         <h1 className=''>Phone</h1>
-//                                     </label>
-//                                     <input type="text" name='phone' placeholder='Phone' required className='w-full 
-//                        my-3 p-2' />
-//                                 </div>
-//                                 <div>
-//                                     <label>
-//                                         <h1 className=''>Address</h1>
-//                                     </label>
-//                                     <input type="text" name='address' placeholder='Address' required className='w-full 
-//                        my-3 p-2' />
-//                                 </div>
-//                                 <div>
-//                                     <label>
-//                                         <h1 className=''>Disease Name</h1>
-//                                     </label>
-//                                     <input type="text" name='disease' placeholder='Disease Name' required className='w-full 
-//                        my-3 p-2' />
-//                                 </div>
-//                                 <div>
-//                                     <label>
-//                                         <h1 className='mb-3'>Present Condition of Disease</h1>
-//                                     </label>
-//                                     <select className="w-full p-2" name='condition'>
-//                                         <option disabled selected>Select The patients present condition</option>
-//                                         <option>Severe</option>
-//                                         <option>Moderate</option>
-//                                         <option>Mild</option>
-//                                     </select>
-//                                 </div>
-//                             </div>
-//                             <input type="submit" value="Add Patient Details" className='btn btn-info text-white w-full my-5 rounded-none' />
-//                         </form>
-//                     </div>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
-// export default AddProducts;
+    if(navigation.state === 'loading'){
+        return <button className="btn text-white btn-circle btn-lg loading"></button>
+    }
+
+
+    return (
+        <div>
+            <h1 className='text-4xl font-bold text-center text-white my-6'>Add Products</h1>
+            <div className='lg:w-3/4 lg:mx-44'>
+                <div className='p-7 rounded-2xl bg-white lg:mx-auto'>
+                    <form onSubmit={handleSubmit(handleAddProduct)}>
+                        <div className="form-control w-full min-w-xs">
+                            <label className="label"> <span className="label-text">Product Name</span></label>
+                            <input type="text" {...register("title", {
+                                required: "Product Name is Required"
+                            })} className="input input-bordered w-full min-w-xs" placeholder='Enter Your Product Name' />
+                            {errors.title && <p className='text-red-600 py-3'>{errors.title.message}</p>}
+                        </div>
+                        <div className="form-control w-full min-w-xs mt-5">
+                            <label className="label"> <span className="label-text"></span></label>
+                            <input type='file' {...register("image", {
+                                required: "Photo is Required"
+                            })} className="input input-bordered border-dashed w-full min-w-xs p-2" placeholder='Upload Your Photo' />
+                            {errors.image && <p className='text-red-600 py-3'>{errors.image.message}</p>}
+                        </div>
+                        <input className='btn text-white mt-5 w-full' value="Add Product" type="submit" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default AddProducts;
