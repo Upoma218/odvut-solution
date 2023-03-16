@@ -48,7 +48,7 @@ const UpdateInfo = () => {
                        my-3 p-2 bg-info border-none' />
                     </div>
                 </div>
-                <input type="submit" value="Update Patient Information" className='btn btn-info text-white w-full my-5 rounded-none' />
+                <input type="submit" value="Update Product Information" className='btn btn-info text-white w-full my-5 rounded-none' />
             </form>
         </div>
     );
